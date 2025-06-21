@@ -25,6 +25,9 @@ jobs:
       # 4. 아티팩트 업로드 (선택)
       - name: Upload JAR
         uses: actions/upload-artifact@v4    # ← v3 → v4로 업데이트
+        with:
+          name: app-jar
+          path: build/libs/*.jar
 
       # 5. EC2에 .env 생성
       - name: Generate .env on EC2
