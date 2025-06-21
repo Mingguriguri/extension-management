@@ -60,7 +60,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
             cd /home/ubuntu/extension-management
-            docker compose down
+            docker-compose down
             git pull origin main
             docker-compose pull
             docker-compose build
