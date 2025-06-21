@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: extension-management
+  profiles:
+    active: dev
