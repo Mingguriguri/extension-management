@@ -3,6 +3,7 @@ package com.madrascheck.extension_management.service;
 import com.madrascheck.extension_management.entity.Extension;
 import com.madrascheck.extension_management.entity.ExtensionType;
 import com.madrascheck.extension_management.exception.DuplicateExtensionException;
+import com.madrascheck.extension_management.exception.ExtensionLimitExceededException;
 import com.madrascheck.extension_management.repository.ExtensionRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,14 @@ public class ExtensionServiceImpl implements ExtensionService {
     @Override
     public Extension addCustom(String name) {
         String normalizedName = name.trim().toLowerCase();
+
+        // Custom 개수 제한 검사
+        long customCount = extensionRepository.countByType(ExtensionType.CUSTOM);
+        if (customCount >= 200) {
+            throw new ExtensionLimitExceededException(
+                    "커스텀 확장자는 최대 200개까지만 추가할 수 있습니다. 현재 개수: " + customCount
+            );
+        }
 
         // FIXED 목록에 이미 있는지 검사
         if (extensionRepository.existsByNameIgnoreCaseAndType(normalizedName, ExtensionType.FIXED)) {
