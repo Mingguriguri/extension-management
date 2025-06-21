@@ -1,0 +1,54 @@
+package com.madrascheck.extension_management.service;
+
+import com.madrascheck.extension_management.entity.Extension;
+import com.madrascheck.extension_management.entity.ExtensionType;
+import com.madrascheck.extension_management.repository.ExtensionRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ExtensionServiceImpl implements ExtensionService {
+    private final ExtensionRepository extensionRepository;
+
+    public ExtensionServiceImpl(ExtensionRepository extensionRepository) {
+        this.extensionRepository = extensionRepository;
+    }
+
+    @Override
+    public List<Extension> findAll() {
+        return extensionRepository.findAll();
+    }
+
+    @Override
+    public Extension addCustom(String name) {
+        // TODO 중복 검사, 형식 검사 등 필요 시 여기서 추가
+        Extension ext= new Extension(name, ExtensionType.CUSTOM);
+
+        return extensionRepository.save(ext);
+    }
+
+    @Override
+    public Extension toggleFixed(Long id, boolean enabled) {
+        Extension ext = extensionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Extension ID " + id + " not found"));
+        if (ext.getType() != ExtensionType.FIXED) {
+            throw new IllegalArgumentException("ID " + id + " is not a FIXED extension");
+        }
+        // TODO: 현재 상태와 같은지 다른지 확인.
+        ext.changeEnabled(enabled);
+
+        return extensionRepository.save(ext);
+    }
+
+    @Override
+    public void deleteCustom(Long id) {
+        Extension ext = extensionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ID " + id + " not found"));
+        if (ext.getType() != ExtensionType.CUSTOM) {
+            throw new IllegalArgumentException("ID " + id + " is not a CUSTOM extension");
+        }
+        extensionRepository.delete(ext);
+    }
+
+}
