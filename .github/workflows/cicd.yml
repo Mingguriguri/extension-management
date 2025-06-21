@@ -22,14 +22,20 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean bootJar -x test
 
-      # 4. 아티팩트 업로드 (선택)
+      # 4. 아티팩트 업로드
       - name: Upload JAR
-        uses: actions/upload-artifact@v4    # ← v3 → v4로 업데이트
+        uses: actions/upload-artifact@v4
         with:
           name: app-jar
           path: build/libs/*.jar
 
-      # 5. EC2에 .env 생성
+     # 5. SSH 키 로드
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.1  # ← 존재하는 latest tag로 변경 :contentReference[oaicite:0]{index=0}
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      # 6. EC2에 .env 생성
       - name: Generate .env on EC2
         env:
           RDS_HOST:     ${{ secrets.RDS_HOST }}
@@ -48,12 +54,6 @@ jobs:
             RDS_PASSWORD=${RDS_PASSWORD}
             EOL
           EOF
-
-      # 6. SSH 키 로드
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.1  # ← 존재하는 latest tag로 변경 :contentReference[oaicite:0]{index=0}
-        with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
       # 7. EC2에 도커 컴포즈 배포
       - name: Deploy to EC2
