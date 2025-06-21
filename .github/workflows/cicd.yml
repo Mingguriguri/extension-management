@@ -37,23 +37,15 @@ jobs:
 
       # 6. EC2에 .env 생성
       - name: Generate .env on EC2
-        env:
-          RDS_HOST:     ${{ secrets.RDS_HOST }}
-          RDS_PORT:     ${{ secrets.RDS_PORT }}
-          RDS_DB_NAME:  ${{ secrets.RDS_DB_NAME }}
-          RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
-          RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /home/ubuntu/extension-management
-            cat > .env <<EOL
-            RDS_HOST=${RDS_HOST}
-            RDS_PORT=${RDS_PORT}
-            RDS_DB_NAME=${RDS_DB_NAME}
-            RDS_USERNAME=${RDS_USERNAME}
-            RDS_PASSWORD=${RDS_PASSWORD}
-            EOL
-          EOF
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "
+            cd /home/ubuntu/extension-management &&
+            echo \"RDS_HOST=${{ secrets.RDS_HOST }}\"     >  .env &&
+            echo \"RDS_PORT=${{ secrets.RDS_PORT }}\"     >> .env &&
+            echo \"RDS_DB_NAME=${{ secrets.RDS_DB_NAME }}\" >> .env &&
+            echo \"RDS_USERNAME=${{ secrets.RDS_USERNAME }}\" >> .env &&
+            echo \"RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}\" >> .env
+          "
 
       # 7. EC2에 도커 컴포즈 배포
       - name: Deploy to EC2
