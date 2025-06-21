@@ -24,12 +24,9 @@ jobs:
 
       # 4. 아티팩트 업로드 (선택)
       - name: Upload JAR
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-jar
-          path: build/libs/*.jar
-          
-      # 5. env 파일 생성
+        uses: actions/upload-artifact@v4    # ← v3 → v4로 업데이트
+
+      # 5. EC2에 .env 생성
       - name: Generate .env on EC2
         env:
           RDS_HOST:     ${{ secrets.RDS_HOST }}
@@ -38,19 +35,20 @@ jobs:
           RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
           RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
         run: |
-              ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
-                cd /home/ec2-user/extension-management
-                cat > .env <<EOL
-                RDS_HOST=${RDS_HOST}
-                RDS_PORT=${RDS_PORT}
-                RDS_DB_NAME=${RDS_DB_NAME}
-                RDS_USERNAME=${RDS_USERNAME}
-                RDS_PASSWORD=${RDS_PASSWORD}
-                EOL
-                        EOF
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/ec2-user/extension-management
+            cat > .env <<EOL
+            RDS_HOST=${RDS_HOST}
+            RDS_PORT=${RDS_PORT}
+            RDS_DB_NAME=${RDS_DB_NAME}
+            RDS_USERNAME=${RDS_USERNAME}
+            RDS_PASSWORD=${RDS_PASSWORD}
+            EOL
+          EOF
+
       # 6. SSH 키 로드
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.12.1
+        uses: webfactory/ssh-agent@v0.9.1  # ← 존재하는 latest tag로 변경 :contentReference[oaicite:0]{index=0}
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
