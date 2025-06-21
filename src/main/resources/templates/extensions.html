@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title>파일 확장자 차단 관리</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script th:src="@{'https://unpkg.com/axios/dist/axios.min.js'}"></script>
+</head>
+<body>
+<header><h1>파일 확장자 차단 관리</h1></header>
+<main>
+    <!-- 1. 고정 확장자 -->
+    <section class="card">
+        <h2 data-step="1">고정 확장자</h2>
+        <div class="fixed-list">
+            <div th:each="ext : ${fixedExtensions}">
+                <label>
+                    <input type="checkbox"
+                           th:attr="data-id=${ext.id}"
+                           th:checked="${ext.enabled}"
+                           th:onchange="|toggleFixed(this)|"/>
+                    <span th:text="${ext.name}">.exe</span>
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 커스텀 확장자 추가 -->
+    <section class="card">
+        <h2 data-step="2">커스텀 확장자 추가</h2>
+        <form id="addCustomForm" onsubmit="addCustom(event)">
+            <input type="text" id="customExtInput" maxlength="20" required
+                   placeholder="txt 입력"/>
+            <button type="submit">+추가</button>
+
+        </form>
+        <p id="customError" class="error-msg"></p>
+    </section>
+
+    <!-- 3. 커스텀 확장자 목록 -->
+    <section class="card">
+        <h2 data-step="3">커스텀 확장자 목록</h2>
+        <div class="counter"
+             th:text="${#lists.size(customExtensions)} + '/200'"></div>
+        <ul>
+            <li th:each="ext : ${customExtensions}">
+                <span th:text="${ext.name}">.log</span>
+                <button type="button"
+                        th:attr="data-id=${ext.id}"
+                        onclick="deleteCustom(this)">✕</button>
+            </li>
+        </ul>
+    </section>
+</main>
+
+<script>
+    function toggleFixed(el) {
+        const id = el.getAttribute('data-id');
+        axios.patch(`/api/extensions/${id}`, { enabled: el.checked })
+            .catch(console.error);
+    }
+    function addCustom(e) {
+        e.preventDefault();
+        const input = document.getElementById('customExtInput');
+        const errEl = document.getElementById('customError');
+        errEl.textContent = '';
+        axios.post('/api/extensions', { name: input.value.trim() })
+            .then(() => location.reload())
+            .catch(err => {
+                errEl.textContent = err.response?.data?.message || '오류';
+            });
+    }
+    function deleteCustom(el) {
+        const id = el.getAttribute('data-id');
+        axios.delete(`/api/extensions/${id}`)
+            .then(() => location.reload())
+            .catch(console.error);
+    }
+</script>
+</body>
+</html>
