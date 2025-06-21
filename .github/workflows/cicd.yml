@@ -45,7 +45,7 @@ jobs:
           RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /home/ec2-user/extension-management
+            cd /home/ubuntu/extension-management
             cat > .env <<EOL
             RDS_HOST=${RDS_HOST}
             RDS_PORT=${RDS_PORT}
@@ -58,8 +58,8 @@ jobs:
       # 7. EC2에 도커 컴포즈 배포
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /home/ec2-user/extension-management
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/ubuntu/extension-management
             git pull origin main
             docker-compose pull
             docker-compose build
