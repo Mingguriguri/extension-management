@@ -1,6 +1,4 @@
 spring:
-  profiles: prod
-
   datasource:
     url: jdbc:mysql://${RDS_HOST}:${RDS_PORT}/${RDS_DB_NAME}
     driver-class-name: com.mysql.cj.jdbc.Driver
