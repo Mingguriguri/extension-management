@@ -28,7 +28,7 @@ ENV SPRING_PROFILES_ACTIVE=prod
 COPY --from=builder /home/gradle/project/build/libs/*.jar app.jar
 
 # 애플리케이션 포트
-EXPOSE 8080
+EXPOSE 80
 
 # 컨테이너 기동 시 실행
 ENTRYPOINT ["java","-jar","/app/app.jar"]
