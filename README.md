@@ -1,8 +1,12 @@
 # “파일 확장자 차단” 과제
 
-> 사이트 바로가기: https://madrascheck-extension-kmj.shop/extension
+> [사이트 바로가기](https://madrascheck-extension-kmj.shop/extensions) 
+> [SWAGGER 바로가기](https://madrascheck-extension-kmj.shop/swagger-ui/index.html)
+<img width="500" alt="스크린샷 2025-06-22 오전 9 58 03" src="https://github.com/user-attachments/assets/53e67ac6-14df-4a6a-8824-0190d76f0ed4" />
 
-<img width="1710" alt="스크린샷 2025-06-21 오후 11 54 46" src="https://github.com/user-attachments/assets/9959766a-b5f7-41df-bc7a-eb19e97a2568" />
+https://github.com/user-attachments/assets/c8ccc1a8-2934-48de-b283-16acfeb9e439
+
+
 
 ## 기능
 1. 고정 확장자 목록 관리
@@ -43,7 +47,7 @@ erDiagram
 
 ## API 설계
 > [!IMPORTANT]
-> [SWAGGER 문서 바로가기 링크](http://ec2-43-200-172-244.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html)
+> [SWAGGER 바로가기](https://madrascheck-extension-kmj.shop/swagger-ui/index.html)
 
 - **GET /extensions**: 모든 확장자(FIXED + CUSTOM)와 `enabled` 값을 반환
 - **PATCH /extensions/{id}**: FIXED 확장자의 `enabled` 토글
