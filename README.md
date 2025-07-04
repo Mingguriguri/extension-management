@@ -1,5 +1,8 @@
 # “파일 확장자 차단” 과제
 
+> [!CAUTION]
+> 현재 과제 테스트가 종료되어, 배포한 클라우드 서비스를 모두 중단하였습니다. (EC2 Instance, RDS, Route53)
+
 > [사이트 바로가기](https://madrascheck-extension-kmj.shop/extensions) 
 > [SWAGGER 바로가기](https://madrascheck-extension-kmj.shop/swagger-ui/index.html)
 <img width="500" alt="스크린샷 2025-06-22 오전 9 58 03" src="https://github.com/user-attachments/assets/53e67ac6-14df-4a6a-8824-0190d76f0ed4" />
